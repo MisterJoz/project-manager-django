@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4">
+      <h1 class="display-3">Welcome, {{request.user}}</h1>
+      <p class="lead">Your project manager.</p>
+      <a href="{% url 'add_project' %}" class="btn btn-primary btn-lg">Add Project</a>
+      <a href="{% url 'add_contact' %}" class="btn btn-primary btn-lg">Add Contact</a>
+
+    </header>
+
+    <!-- Page Features -->
+    <div class="row text-center">
+      {% for p in projects %}
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h4 class="card-title">{{p.name}}</h4>
+            <p class="card-text">{{p.job_description}}</p>
+          </div>
+          <div class="card-footer">
+
+            <a href="{% url 'project' p.id%}" class="btn btn-primary">View </a>
+          </div>
+          {% comment %} <div class="card-footer">
+
+            <a href="{% url 'update_project' p.id%}" class="btn btn-warning">Edit </a>
+          </div> {% endcomment %}
+          <div class="card-footer">
+
+            <a href="{% url 'delete_project' p.id%}" class="btn btn-danger">Delete </a>
+          </div>
+        </div>
+      </div> 
+      {% endfor %}
+       
+
+      
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+
+
+
+{% endblock content %}

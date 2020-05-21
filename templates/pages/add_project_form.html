@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+            <form action="" method="POST" style="">
+                <div class="row">
+                    {% csrf_token %}
+                    <div class="col-sm">
+                        <table>
+                        {{form.as_table}}
+                        </table>
+                    </div>
+                    <div class="col-sm">
+                        <div class="container1">
+                            <button class="add_form_field">Add New Sign &nbsp; 
+                                <span style="font-size:16px; font-weight:bold;">+ </span>
+                            </button>
+                            <div>
+                                    <input id="sign-1" type="text" name="mytext-1" placeholder="Sign Name">
+                                    <input id="price-1" type="number" name="mysign-1" placeholder="Sign Price">
+                            </div>
+                        </div>
+                        <input class='btn btn-primary' type="submit" name="submit" style="margin: 25px; min-width: 100%">
+                    </div>
+                </div>
+                
+            </form>
+        
+</div>
+{% endblock content %}

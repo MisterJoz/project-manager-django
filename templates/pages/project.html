@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container" style="overflow-y:auto; overflow-x:auto">
+
+    <table class='table-striped'>
+        <tbody>
+            <tr>
+                <th>Project Name</th>
+                    <td>{{project.name}}</td>
+                    
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td><a href="{% url 'contact' contact.client %}">{{contact.client}}</a></td>
+            </tr>
+            <tr>
+                 <th>Number of Signs</th>
+                <td>{{project.number_of_signs}}</td>
+            </tr>
+            <tr>
+                 <th>Sign Details</th>
+                <td>{{project.sign_details}}</td>
+            </tr>
+            <tr>
+                <th>Subotal</th>
+                    <td>{{project.subtotal}}</td>
+            </tr>
+            <tr>
+                <th>Sign Permit</th>
+                <td>{{project.sign_permit}}</td>
+            </tr>
+            <tr>
+                <th>Engineering</th>
+                <td>{{project.engineering}}</td>
+            </tr>
+            <tr>
+                <th>Other Fees</th>
+                <td>{{project.other_fees}}</td>
+            </tr>
+            <tr>
+                <th>Discount</th>
+                <td>{{project.discount}}</td>
+            </tr>
+            <tr>
+                <th>Cash Discount</th>
+                <td>{{project.cash_discount}}</td>
+            </tr>
+            <tr>
+                <th>Discount Total</th>
+                <td>{{project.discount_total}}</td>
+            </tr>
+            <tr>
+                <th>Final Total</th>
+                <td>{{project.final_total}}</td>
+            </tr>
+            <tr>
+                <th>Deposit Percentage</th>
+                <td>{{project.deposit_percentage}}</td>
+            </tr>
+            <tr>
+                <th>Deposit Amount</th>
+                <td>{{project.deposit_amount}}</td>
+            </tr>
+            <tr>
+                <th>Completion Percentage</th>
+                 <td>{{project.completion_percentage}}</td>
+
+            </tr>
+            <tr>
+                <th>Completion Amount</th>
+                <td>{{project.completion_amount}}</td>
+
+            </tr>
+            <tr>
+                <th>Initial Date</th>
+                <td>{{project.initial_date}}</td>
+                
+            </tr>
+            
+            <tr>
+                <th>Survey Date</th>
+                <td>{{project.survey_date}}</td>
+                
+            </tr>
+            <tr>
+                <th>Approval Date</th>
+                <td>{{project.approval_date}}</td>
+                
+            </tr>
+            <tr>
+                <th>Sign Permit Details</th>
+                {{project.sign_permit_details}}
+            </tr>
+            <tr>
+                <th>Landlord Approval Details</th>
+                {{project.landlord_approval_details}}
+            </tr>
+            <tr>
+                <th>Artwork Approved</th>
+                {% if project.artwork_approved == False %}
+                    <td>No</td>
+                {% else %}
+                    <td>Yes</td>
+                {% endif %}
+                
+            </tr>
+            <tr>
+                <th>Contract Approved</th>
+                {% if project.contract_approved == False %}
+                    <td>No</td>
+                {% else %}
+                    <td>Yes</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Legal Description</th>
+                <td>{{project.legal_description}}</td>
+                
+            </tr>
+            <tr>
+                <th>General Contractor Name</th>
+                <td>{{project.general_contractor_name}}</td>
+                
+            </tr>
+            <tr>
+                <th>Electrician Name</th>
+                <td>{{project.electrician_name}}</td>
+                
+            </tr>
+            <tr>
+                <th>Turnaround Time</th>
+                <td>{{project.turnaround_time}}</td>
+                
+            </tr>
+            <tr>
+                <th>Actual Installation</th>
+                <td>{{project.actual_installation}}</td>
+                
+            </tr>
+            <tr>
+                <th>Production Notes</th>
+                <td>{{project.production_notes}}</td>
+                
+            </tr>
+            <tr>
+                <th>Installation Date</th>
+                {{project.installation_date}}
+            </tr>
+            <tr>
+                <th>Date of Completion</th>
+                <td>{{project.date_of_completion}}</td>
+                
+            </tr>
+            <tr>
+                <th>Job Description</th>
+                <td>{{project.job_description}}</td>
+                
+            </tr>
+            <tr>
+                <th>Special Colors/Materials</th>
+                <td>{{project.special_colors_materials}}</td>
+                
+            </tr>
+            <tr>
+                <th>Important Links</th>
+                <td>{{project.external_links}}</td>
+                
+            </tr>
+        </tbody>
+    </table>
+        
+</div>
+
+{% endblock content %}
