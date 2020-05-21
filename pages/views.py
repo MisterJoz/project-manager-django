@@ -13,7 +13,7 @@ from .forms import ProjectForm, ContactForm, CreateUserForm
 # Create your views here.
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def index(request):
     projects = Project.objects.all().order_by('-intial_date')
@@ -23,7 +23,7 @@ def index(request):
     return render(request, 'pages/index.html', context)
 
 
-# @unauthenticated_user
+@unauthenticated_user
 def register(request):
 
     form = CreateUserForm()
@@ -44,7 +44,7 @@ def register(request):
     return render(request, 'pages/register.html', context)
 
 
-# @unauthenticated_user
+@unauthenticated_user
 def loginPage(request):
 
     if request.method == 'POST':
@@ -84,7 +84,7 @@ def calculatePercentage(deposit_percentage):
     return completion_percentage
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def addProject(request):
     form = ProjectForm()
@@ -147,7 +147,7 @@ def addProject(request):
     return render(request, 'pages/add_project_form.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def addContact(request):
     form = ContactForm()
@@ -178,7 +178,7 @@ def contact(request, pk):
     return render(request, 'pages/contact.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def updateProject(request, pk):
     project = Project.objects.get(id=pk)
@@ -197,7 +197,7 @@ def updateProject(request, pk):
     return render(request, 'pages/add_project_form.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def deleteProject(request, pk):
     project = Project.objects.get(id=pk)
