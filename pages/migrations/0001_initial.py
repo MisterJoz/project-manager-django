@@ -18,53 +18,81 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contact',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('client', models.CharField(blank=True, max_length=200, null=True)),
-                ('contact_person', models.CharField(blank=True, max_length=200, null=True)),
+                ('contact_person', models.CharField(
+                    blank=True, max_length=200, null=True)),
                 ('address', models.CharField(blank=True, max_length=200, null=True)),
                 ('city', models.CharField(blank=True, max_length=200, null=True)),
                 ('state', models.CharField(blank=True, max_length=200, null=True)),
                 ('zip_code', models.IntegerField(null=True)),
-                ('phone', phone_field.models.PhoneField(blank=True, max_length=31, null=True, unique=True)),
+                ('phone', phone_field.models.PhoneField(
+                    blank=True, max_length=31, null=True, unique=True)),
                 ('email', models.EmailField(blank=True, max_length=254, unique=True)),
             ],
         ),
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(blank=True, max_length=200, null=True)),
-                ('number_of_signs', models.IntegerField(blank=True, default=0, null=True)),
+                ('number_of_signs', models.IntegerField(
+                    blank=True, default=0, null=True)),
                 ('subtotal', models.IntegerField(blank=True, default=0, null=True)),
-                ('sign_permit', models.IntegerField(blank=True, default=0, null=True)),
-                ('engineering', models.IntegerField(blank=True, default=0, null=True)),
-                ('other_fees', models.IntegerField(blank=True, default=0, null=True)),
+                ('sign_permit', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('engineering', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('other_fees', models.IntegerField(
+                    blank=True, default=0, null=True)),
                 ('discount', models.FloatField(blank=True, default=0, null=True)),
-                ('cash_discount', models.IntegerField(blank=True, default=0, null=True)),
-                ('discount_total', models.IntegerField(blank=True, default=0, null=True)),
-                ('final_total', models.IntegerField(blank=True, default=0, null=True)),
-                ('deposit_percentage', models.IntegerField(blank=True, default=0, null=True, validators=[django.core.validators.MaxValueValidator(100), django.core.validators.MinValueValidator(0)])),
-                ('deposit_amount', models.IntegerField(blank=True, default=0, null=True)),
-                ('completion_percentage', models.IntegerField(blank=True, default=0, null=True, validators=[django.core.validators.MaxValueValidator(100), django.core.validators.MinValueValidator(0)])),
-                ('completion_amount', models.IntegerField(blank=True, default=0, null=True)),
-                ('intial_date', models.DateField(blank=True, default=django.utils.timezone.now)),
-                ('survey_date', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('approval_date', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
+                ('cash_discount', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('discount_total', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('final_total', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('deposit_percentage', models.IntegerField(blank=True, default=0, null=True, validators=[
+                 django.core.validators.MaxValueValidator(100), django.core.validators.MinValueValidator(0)])),
+                ('deposit_amount', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('completion_percentage', models.IntegerField(blank=True, default=0, null=True, validators=[
+                 django.core.validators.MaxValueValidator(100), django.core.validators.MinValueValidator(0)])),
+                ('completion_amount', models.IntegerField(
+                    blank=True, default=0, null=True)),
+                ('intial_date', models.DateField(
+                    blank=True, default=django.utils.timezone.now)),
+                ('survey_date', models.DateField(blank=True,
+                                                 default=django.utils.timezone.now, null=True)),
+                ('approval_date', models.DateField(blank=True,
+                                                   default=django.utils.timezone.now, null=True)),
                 ('sign_permit_details', models.TextField(blank=True, null=True)),
-                ('landlord_approval_details', models.TextField(blank=True, null=True)),
-                ('artwork_approved', models.BooleanField(blank=True, default=False, null=True)),
-                ('contract_approved', models.BooleanField(blank=True, default=False, null=True)),
+                ('landlord_approval_details',
+                 models.TextField(blank=True, null=True)),
+                ('artwork_approved', models.BooleanField(
+                    blank=True, default=False, null=True)),
+                ('contract_approved', models.BooleanField(
+                    blank=True, default=False, null=True)),
                 ('legal_description', models.TextField(blank=True, null=True)),
-                ('general_contractor_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('electrician_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('turnaround_time', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('actual_installation', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
+                ('general_contractor_name', models.CharField(
+                    blank=True, max_length=200, null=True)),
+                ('electrician_name', models.CharField(
+                    blank=True, max_length=200, null=True)),
+                ('turnaround_time', models.DateField(blank=True,
+                                                     default=django.utils.timezone.now, null=True)),
+                ('actual_installation', models.DateField(
+                    blank=True, default=django.utils.timezone.now, null=True)),
                 ('production_notes', models.TextField(blank=True, null=True)),
-                ('installation_date', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('date_of_completion', models.DateField(blank=True, default=django.utils.timezone.now, null=True)),
+                ('installation_date', models.DateField(blank=True,
+                                                       default=django.utils.timezone.now, null=True)),
+                ('date_of_completion', models.DateField(
+                    blank=True, default=django.utils.timezone.now, null=True)),
                 ('job_description', models.TextField(blank=True, null=True)),
                 ('special_colors_materials', models.TextField(blank=True, null=True)),
-                ('contact_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='pages.Contact')),
+                ('contact_id', models.ForeignKey(
+                    null=True, on_delete=django.db.models.deletion.SET_NULL, to='pages.Contact')),
             ],
         ),
     ]
