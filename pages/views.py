@@ -67,8 +67,11 @@ def logoutUser(request):
     return redirect('login')
 
 
-def calculate(subtotal, no_of_signs, sign_permit, engineering, other_fees, discount, cash_discount):
+def calculate(subtotal, no_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, tax):
     total = subtotal + (sign_permit * no_of_signs) + engineering + other_fees
+    tax_amount = float(tax) * total
+    total += tax_amount
+
     if discount > 0:
         total -= total * discount
     elif cash_discount > 0:
@@ -93,29 +96,30 @@ def addProject(request):
         # get data used to calculate total
 
         number_of_signs = int(form_copy['number_of_signs'])
-        sign_permit = int(form_copy['sign_permit'])
-        engineering = int(form_copy['engineering'])
-        other_fees = int(form_copy['other_fees'])
+        sign_permit = float(form_copy['sign_permit'])
+        engineering = float(form_copy['engineering'])
+        other_fees = float(form_copy['other_fees'])
         # project can have discount OR cash discount
         discount = (float(form_copy['discount']) * .01)
-        cash_discount = int(form_copy['cash_discount'])
+        cash_discount = float(form_copy['cash_discount'])
         # total after discount applied
-        discount_total = int(form_copy['discount_total'])
-        deposit_amount = int(form_copy['deposit_amount'])
-        completion_amount = int(form_copy['completion_amount'])
+        discount_total = float(form_copy['discount_total'])
+        deposit_amount = float(form_copy['deposit_amount'])
+        completion_amount = float(form_copy['completion_amount'])
         # calculate percentage
-        deposit_percentage = int(form_copy['deposit_percentage'])
+        deposit_percentage = float(form_copy['deposit_percentage'])
         form_copy['completion_percentage'] = 100 - deposit_percentage
-        # calculate total sign price as subtotal
 
+        # calculate total sign price as subtotal
         # calculate subtotal given sign price
         sum = 0
         for i in range(number_of_signs):
             i += 1
             sign_order = 'mysign-' + str(i)
             sum += int(form_copy[sign_order])
+            print(sum)
         form_copy['subtotal'] = sum
-        subtotal = int(form_copy['subtotal'])
+        subtotal = float(form_copy['subtotal'])
 
         # if discount %, discount total = disocunt * subtotal
         # if cash discount, discount total = subtotal - cash discount
@@ -127,7 +131,9 @@ def addProject(request):
         # calculate total price
         # form_copy['final_total'] = subtotal
         form_copy['final_total'] = calculate(
-            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount)
+            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, form_copy['tax'])
+
+        # calculate tax
 
         form_copy['deposit_amount'] = (form_copy['final_total'] - (form_copy['final_total'] *
                                                                    form_copy['completion_percentage'] * .01))
@@ -135,9 +141,8 @@ def addProject(request):
         form_copy['completion_amount'] = (form_copy['final_total'] -
                                           form_copy['deposit_amount'])
 
-        print('Sum..........', sum)
         form = ProjectForm(form_copy)
-        print(request.POST)
+        print('Form.......', form)
         if form.is_valid():
             form.save()
             return redirect('/')
@@ -151,11 +156,13 @@ def addProject(request):
 # @allowed_users(allowed_roles=['admin'])
 def addContact(request):
     form = ContactForm()
+
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/')
+
     context = {
         'form': form,
     }
@@ -165,8 +172,7 @@ def addContact(request):
 def project(request, pk):
     project = Project.objects.get(id=pk)
     contact = Contact.objects.get(client=project.contact_id)
-    print(project)
-    print(contact)
+
     context = {'project': project, 'contact': contact}
 
     return render(request, 'pages/project.html', context)
@@ -201,8 +207,12 @@ def updateProject(request, pk):
 # @allowed_users(allowed_roles=['admin'])
 def deleteProject(request, pk):
     project = Project.objects.get(id=pk)
+
     if request.method == "POST":
         project.delete()
         return redirect('/')
-    context = {'project': project}
+
+    context = {
+        'project': project
+    }
     return render(request, 'pages/delete.html', context)
