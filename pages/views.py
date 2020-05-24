@@ -92,9 +92,13 @@ def calculatePercentage(deposit_percentage):
 def addProject(request):
     form = ProjectForm()
     if request.method == 'POST':
-        form_copy = request.POST.copy()
+        form_copy = request.POST
         # get data used to calculate total
+        #  .....
+        mutable = request.POST._mutable
+        request.POST._mutable = True
 
+# ......
         number_of_signs = int(form_copy['number_of_signs'])
         sign_permit = float(form_copy['sign_permit'])
         engineering = float(form_copy['engineering'])
@@ -108,7 +112,8 @@ def addProject(request):
         completion_amount = float(form_copy['completion_amount'])
         # calculate percentage
         deposit_percentage = float(form_copy['deposit_percentage'])
-        form_copy['completion_percentage'] = 100 - deposit_percentage
+        form_copy['completion_percentage'] = round(100 - deposit_percentage, 2)
+        # request.POST['completion_percentage'] = 100 - deposit_percentage
 
         # calculate total sign price as subtotal
         # calculate subtotal given sign price
@@ -135,15 +140,16 @@ def addProject(request):
 
         # calculate tax
 
-        form_copy['deposit_amount'] = (form_copy['final_total'] - (form_copy['final_total'] *
-                                                                   form_copy['completion_percentage'] * .01))
+        form_copy['deposit_amount'] = round((form_copy['final_total'] - (form_copy['final_total'] *
+                                                                         form_copy['completion_percentage'] * .01)), 2)
+        print('Deposit Amount...', form_copy['deposit_amount'])
 
         form_copy['completion_amount'] = (form_copy['final_total'] -
                                           form_copy['deposit_amount'])
 
         form = ProjectForm(form_copy)
-        print('Form.......', form)
         if form.is_valid():
+            request.POST._mutable = mutable
             form.save()
             return redirect('/')
     context = {
@@ -177,23 +183,97 @@ def project(request, pk):
 
     return render(request, 'pages/project.html', context)
 
+# contact form
+
 
 def contact(request, pk):
     contact = Contact.objects.get(client=pk)
     context = {'contact': contact}
     return render(request, 'pages/contact.html', context)
+# update contact form
+
+
+def updateContact(request, pk):
+    # project = Project.objects.get(id=pk)
+    contact = Contact.objects.get(client=pk)
+    form = ContactForm(instance=contact)
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST, instance=contact)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {
+        # 'project': project,
+        'contact': contact,
+        'form': form,
+    }
+    return render(request, 'pages/add_contact_form.html', context)
 
 
 @login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 def updateProject(request, pk):
     project = Project.objects.get(id=pk)
-    print('Project...', project)
     form = ProjectForm(instance=project)
 
     if request.method == 'POST':
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+
+        number_of_signs = int(request.POST['number_of_signs'])
+        sign_permit = float(request.POST['sign_permit'])
+        engineering = float(request.POST['engineering'])
+        other_fees = float(request.POST['other_fees'])
+        # project can have discount OR cash discount
+        discount = (float(request.POST['discount']) * .01)
+        cash_discount = float(request.POST['cash_discount'])
+        # total after discount applied
+        discount_total = float(request.POST['discount_total'])
+        deposit_amount = float(request.POST['deposit_amount'])
+        completion_amount = float(request.POST['completion_amount'])
+        # calculate percentage
+        deposit_percentage = float(request.POST['deposit_percentage'])
+        request.POST['completion_percentage'] = round(
+            100 - deposit_percentage, 2)
+        # request.POST['completion_percentage'] = 100 - deposit_percentage
+
+        # calculate total sign price as subtotal
+        # calculate subtotal given sign price
+        sum = 0
+        for i in range(number_of_signs):
+            i += 1
+            sign_order = 'mysign-' + str(i)
+            sum += int(request.POST[sign_order])
+            print(sum)
+        request.POST['subtotal'] = sum
+        subtotal = float(request.POST['subtotal'])
+
+        # if discount %, discount total = disocunt * subtotal
+        # if cash discount, discount total = subtotal - cash discount
+        if discount:
+            request.POST['discount_total'] = discount * subtotal
+        elif cash_discount:
+            request.POST['discount_total'] = cash_discount
+
+        # calculate total price
+        # request.POST['final_total'] = subtotal
+        request.POST['final_total'] = calculate(
+            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, request.POST['tax'])
+
+        # calculate tax
+
+        request.POST['deposit_amount'] = round((request.POST['final_total'] - (request.POST['final_total'] *
+                                                                               request.POST['completion_percentage'] * .01)), 2)
+        print('Deposit Amount...', request.POST['deposit_amount'])
+
+        request.POST['completion_amount'] = (request.POST['final_total'] -
+                                             request.POST['deposit_amount'])
+
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
+            request.POST._mutable = mutable
             form.save()
             return redirect('/')
 

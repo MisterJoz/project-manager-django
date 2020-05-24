@@ -2,7 +2,7 @@
 
 {% block content %}
 
-
+<div class="container">
 <div class="container" style="overflow-y:auto; overflow-x:auto">
     <h1>Contact</h1>
     <table class='table-striped'>
@@ -45,8 +45,11 @@
             
         </tbody>
     </table>
-        
+    
 </div>
+    <a style="margin: 15px;" href="{% url 'update_contact' contact.client %}" type="button" class="btn btn-warning">Edit Contact</a>
+</div>
+
 
 {% endblock content %}
     

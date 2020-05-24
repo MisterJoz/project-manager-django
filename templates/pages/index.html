@@ -27,10 +27,10 @@
 
             <a href="{% url 'project' p.id%}" class="btn btn-primary">View </a>
           </div>
-          {% comment %} <div class="card-footer">
+          <div class="card-footer">
 
-            <a href="{% url 'update_project' p.id%}" class="btn btn-warning">Edit </a>
-          </div> {% endcomment %}
+            <a href="{% url 'update_project' p.id%}" class="btn btn-warning" target='_blank'>Edit </a>
+          </div> 
           <div class="card-footer">
 
             <a href="{% url 'delete_project' p.id%}" class="btn btn-danger">Delete </a>
