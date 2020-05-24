@@ -67,10 +67,8 @@ def logoutUser(request):
     return redirect('login')
 
 
-def calculate(subtotal, no_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, tax):
+def calculate(subtotal, no_of_signs, sign_permit, engineering, other_fees, discount, cash_discount):
     total = subtotal + (sign_permit * no_of_signs) + engineering + other_fees
-    tax_amount = float(tax) * total
-    total += tax_amount
 
     if discount > 0:
         total -= total * discount
@@ -79,6 +77,11 @@ def calculate(subtotal, no_of_signs, sign_permit, engineering, other_fees, disco
     else:
         return total
     return total
+
+
+def calculateTaxAmount(amount, tax):
+    tax_amount = float(tax) * float(amount)
+    return tax_amount
 
 
 def calculatePercentage(deposit_percentage):
@@ -134,15 +137,18 @@ def addProject(request):
             form_copy['discount_total'] = cash_discount
 
         # calculate total price
-        # form_copy['final_total'] = subtotal
-        form_copy['final_total'] = calculate(
-            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, form_copy['tax'])
+        total = calculate(
+            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount)
+        # tax amount
+        form_copy['tax_amount'] = calculateTaxAmount(
+            total, form_copy['tax'])
+        # add tax to total
+        form_copy['final_total'] = total + form_copy['tax_amount']
 
-        # calculate tax
+        # calculate tax amount
 
         form_copy['deposit_amount'] = round((form_copy['final_total'] - (form_copy['final_total'] *
                                                                          form_copy['completion_percentage'] * .01)), 2)
-        print('Deposit Amount...', form_copy['deposit_amount'])
 
         form_copy['completion_amount'] = (form_copy['final_total'] -
                                           form_copy['deposit_amount'])
@@ -260,9 +266,17 @@ def updateProject(request, pk):
         # calculate total price
         # request.POST['final_total'] = subtotal
         request.POST['final_total'] = calculate(
-            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount, request.POST['tax'])
+            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount)
 
         # calculate tax
+        # calculate total price
+        total = calculate(
+            subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount)
+        # tax amount
+        request.POST['tax_amount'] = calculateTaxAmount(
+            total, request.POST['tax'])
+        # add tax to total
+        request.POST['final_total'] = total + request.POST['tax_amount']
 
         request.POST['deposit_amount'] = round((request.POST['final_total'] - (request.POST['final_total'] *
                                                                                request.POST['completion_percentage'] * .01)), 2)

@@ -38,6 +38,7 @@ class Project(models.Model):
     other_fees = models.IntegerField(null=True, blank=True, default=0)
     tax = models.FloatField(null=True, blank=True,
                             default=.0825)
+    tax_amount = models.FloatField(null=True, blank=True, default=0)
     discount = models.IntegerField(null=True, blank=True, default=0, validators=[
         MinValueValidator(0), MaxValueValidator(100)])
     cash_discount = models.IntegerField(null=True, blank=True, default=0)
