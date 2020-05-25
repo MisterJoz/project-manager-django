@@ -251,8 +251,13 @@ def updateProject(request, pk):
         for i in range(number_of_signs):
             i += 1
             sign_order = 'mysign-' + str(i)
-            sum += int(request.POST[sign_order])
-            print(sum)
+
+            if not request.POST.get('sign_order'):
+                sum = request.POST['subtotal']
+            else:
+                sum += int(request.POST[sign_order])
+                print(sum)
+
         request.POST['subtotal'] = sum
         subtotal = float(request.POST['subtotal'])
 
@@ -273,8 +278,8 @@ def updateProject(request, pk):
         total = calculate(
             subtotal, number_of_signs, sign_permit, engineering, other_fees, discount, cash_discount)
         # tax amount
-        request.POST['tax_amount'] = calculateTaxAmount(
-            total, request.POST['tax'])
+        request.POST['tax_amount'] = round(calculateTaxAmount(
+            total, request.POST['tax']))
         # add tax to total
         request.POST['final_total'] = total + request.POST['tax_amount']
 
